@@ -1,6 +1,7 @@
 Dependências:
-python 3.11
-virtualenv
+
+- python 3.11
+- virtualenv
 
 ```
 git clone git@github.com:ricardofunke/chat_mestre.git
