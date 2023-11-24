@@ -4,9 +4,10 @@ from textwrap import dedent
 
 from combate.function_calls import battle_plot_func, battle_result_func
 from common.openai_calls import call_openai
+from controle.game_settings import GameSettings
 
 
-def create_battle_scene(game_settings, current_situation):
+def create_battle_scene(game_settings: GameSettings, current_situation):
     game_settings_json = json.dumps(asdict(game_settings), indent=4)
     prompt = dedent(f"""\
         Using the main goal of the game and based on its properties between <> bellow
@@ -25,7 +26,7 @@ def create_battle_scene(game_settings, current_situation):
     return exploration
 
 
-def run_battle_iteration(game_settings, current_situation, user_action, fight_outcome):
+def run_battle_iteration(game_settings: GameSettings, current_situation, user_action, fight_outcome):
     game_settings_json = json.dumps(asdict(game_settings), indent=4)
     match user_action:
         case 'fight':
@@ -52,7 +53,7 @@ def run_battle_iteration(game_settings, current_situation, user_action, fight_ou
                         <{game_settings_json}>
                         And using the current situation of the game between <> bellow
                         <{current_situation}>
-                        Create a text that tells the user did not won or lost but remains in the battle.\
+                        Create a text with a new situation where the user did not won or lost but remains in the battle.\
                     """)
         case 'flee':
             prompt = dedent(f"""\

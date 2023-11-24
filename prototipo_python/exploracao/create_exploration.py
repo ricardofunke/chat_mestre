@@ -28,8 +28,11 @@ def create_exploration_scenery(game_settings: GameSettings):
     return exploration
 
 
-def generate_options(exploration_plot, previous_iteration):
+def generate_options(game_settings: GameSettings, exploration_plot, previous_iteration):
+    game_settings_json = json.dumps(asdict(game_settings), indent=4)
     prompt = dedent(f"""\
+        Using the settings of the game that is between <> bellow
+        <{game_settings_json}>
         Generate 4 options for the user to choose for the exploration turn based on the user's previous iteration between <> bellow
         <{previous_iteration}>
         Keep the context of the exploration between <> bellow 
@@ -45,9 +48,12 @@ def generate_options(exploration_plot, previous_iteration):
     return exploration_options
 
 
-def run_next_iteration(exploration_plot, previous_iteration):
+def run_next_iteration(game_settings: GameSettings, exploration_plot, previous_iteration):
+    game_settings_json = json.dumps(asdict(game_settings), indent=4)
     prompt = dedent(f"""\
-        Using the context of the exploration plot between <> bellow
+        Using the settings of the game that is between <> bellow
+        <{game_settings_json}>
+        And using the context of the exploration plot between <> bellow
         <{exploration_plot}>
         And based on the user's previous iteration with this exploration plot described between <> bellow
         <{previous_iteration}>
@@ -62,8 +68,11 @@ def run_next_iteration(exploration_plot, previous_iteration):
     return next_iteration
 
 
-def finish_exploration(exploration_plot, previous_iteration):
+def finish_exploration(game_settings: GameSettings, exploration_plot, previous_iteration):
+    game_settings_json = json.dumps(asdict(game_settings), indent=4)
     prompt = dedent(f"""\
+        Using the settings of the game that is between <> bellow
+        <{game_settings_json}>
         Generate the final iteration for the exploration turn based on its plot between <> bellow
         <{exploration_plot}>
         And also based on the user's previous iteration between <> bellow
@@ -78,9 +87,12 @@ def finish_exploration(exploration_plot, previous_iteration):
     return final_iteration
 
 
-def generate_final_options(exploration_plot, previous_iteration):
+def generate_final_options(game_settings: GameSettings, exploration_plot, previous_iteration):
+    game_settings_json = json.dumps(asdict(game_settings), indent=4)
     prompt = dedent(f"""\
-        Based on the the exploration plot between <> bellow
+        Using the settings of the game that is between <> bellow
+        <{game_settings_json}>
+        And based on the the exploration plot between <> bellow
         <{exploration_plot}>
         And also based on the user's previous iteration between <> bellow
         <{previous_iteration}>
@@ -96,13 +108,16 @@ def generate_final_options(exploration_plot, previous_iteration):
     return exploration_final_options
 
 
-def end_exploration(exploration_plot, previous_iteration):
+def end_exploration(game_settings: GameSettings, exploration_plot, previous_iteration):
+    game_settings_json = json.dumps(asdict(game_settings), indent=4)
     prompt = dedent(f"""\
-            Give an end story to the exploration turn based on its plot between <> bellow
-            <{exploration_plot}>
-            And also based on the user's previous iteration between <> bellow
-            <{previous_iteration}>\
-        """)
+        Using the settings of the game that is between <> bellow
+        <{game_settings_json}>
+        Give an end story to the exploration turn based on its plot between <> bellow
+        <{exploration_plot}>
+        And also based on the user's previous iteration between <> bellow
+        <{previous_iteration}>\
+    """)
 
     exploration_end_story = call_openai(
         messages=[{'role': 'system', 'content': prompt}],

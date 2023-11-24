@@ -1,7 +1,6 @@
 import json
 import sys
 from dataclasses import asdict
-from random import randrange
 from time import sleep
 
 from combate.battle_calculation import fight_outcome
@@ -44,7 +43,7 @@ if __name__ == '__main__':
 
     sleep(3)
 
-    expl_options = generate_options(exploration['exploration_plot'], exploration['first_iteration'])
+    expl_options = generate_options(settings, exploration['exploration_plot'], exploration['first_iteration'])
 
     print(json.dumps(expl_options, indent=4))
     print()
@@ -57,7 +56,7 @@ if __name__ == '__main__':
     if not expl_opt:
         sys.exit(0)
 
-    next_iter = run_next_iteration(exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
+    next_iter = run_next_iteration(settings, exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
 
     print(f"Selected \"option_{expl_opt}\": \"{expl_options[f'option_{expl_opt}']}\"")
     print()
@@ -71,7 +70,7 @@ if __name__ == '__main__':
 
     n = 3
     for i in range(n):
-        expl_options = generate_options(exploration['exploration_plot'], next_iter['next_iteration'])
+        expl_options = generate_options(settings, exploration['exploration_plot'], next_iter['next_iteration'])
 
         print(json.dumps(expl_options, indent=4))
         print()
@@ -84,7 +83,7 @@ if __name__ == '__main__':
         if not expl_opt:
             sys.exit(0)
 
-        next_iter = run_next_iteration(exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
+        next_iter = run_next_iteration(settings, exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
 
         print(f"Selected \"option_{expl_opt}\": \"{expl_options[f'option_{expl_opt}']}\"")
         print()
@@ -96,7 +95,7 @@ if __name__ == '__main__':
 
         sleep(3)
 
-    expl_options = generate_options(exploration['exploration_plot'], next_iter['next_iteration'])
+    expl_options = generate_options(settings, exploration['exploration_plot'], next_iter['next_iteration'])
 
     print(json.dumps(expl_options, indent=4))
     print()
@@ -109,7 +108,7 @@ if __name__ == '__main__':
     if not expl_opt:
         sys.exit(0)
 
-    next_iter = run_next_iteration(exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
+    next_iter = run_next_iteration(settings, exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
 
     print(f"Selected \"option_{expl_opt}\": \"{expl_options[f'option_{expl_opt}']}\"")
     print()
@@ -172,7 +171,7 @@ if __name__ == '__main__':
 
         sleep(3)
 
-    final_iter = finish_exploration(exploration['exploration_plot'], battle_res['battle_result_description'])
+    final_iter = finish_exploration(settings, exploration['exploration_plot'], battle_res['battle_result_description'])
 
     print(json.dumps(final_iter, indent=4))
     print()
@@ -181,7 +180,7 @@ if __name__ == '__main__':
 
     sleep(3)
 
-    final_opts = generate_final_options(exploration['exploration_plot'], final_iter['last_iteration'])
+    final_opts = generate_final_options(settings, exploration['exploration_plot'], final_iter['last_iteration'])
 
     print(json.dumps(final_opts, indent=4))
     print()
@@ -194,7 +193,7 @@ if __name__ == '__main__':
     if not expl_opt:
         sys.exit(0)
 
-    ending = end_exploration(exploration['exploration_plot'], final_opts[f'option_{expl_opt}'])
+    ending = end_exploration(settings, exploration['exploration_plot'], final_opts[f'option_{expl_opt}'])
 
     print(f"Selected \"option_{expl_opt}\": \"{final_opts[f'option_{expl_opt}']}\"")
     print()
