@@ -1,5 +1,4 @@
 import json
-import sys
 from json import JSONDecodeError
 from time import sleep
 
@@ -10,7 +9,7 @@ from common.env_vars import OPENAI_KEY
 openai.api_key = OPENAI_KEY
 
 
-def call_openai(messages: list, function_call: dict, temperature=0.8, model='gpt-3.5-turbo', timeout=60) -> dict:
+def call_openai(messages: list, function_call: dict, temperature=0.8, top_p=0.8, model='gpt-3.5-turbo', timeout=60) -> dict:
 
     max_retries = 3
     errors = []
@@ -22,6 +21,7 @@ def call_openai(messages: list, function_call: dict, temperature=0.8, model='gpt
                 tools=[function_call],
                 tool_choice={'type': 'function', 'function': {'name': function_call['function']['name']}},
                 temperature=temperature,
+                top_p=top_p,
                 timeout=timeout
             )
         except (openai.APIError,
