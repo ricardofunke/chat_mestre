@@ -19,14 +19,16 @@ start_rpg_adventure = {
                 'begin_history_text': {
                     'type': 'string',
                     'description': 'The full text generated to begin the RPG adventure. '
-                                   'This field must have a max length of 500 characters',
-                    'maxLength': 500,
+                                   'This field must have a max length of 800 characters',
+                                   # add a feature
+                    'maxLength': 800,
                 },
                 'next_iteration_summary': {
                     'type': 'string',
                     'description': 'A brief summary of begin_history_text with all its most important topics to be used in the next iteration. '
-                                   'This field must have a max length of 100 characters',
-                    'maxLength': 100,
+                                   'This field must have a max length of 300 characters',
+                                    # add a feature
+                    'maxLength': 300,
                 }
             },
             'required': ['begin_history_text', 'next_iteration_summary']
@@ -46,35 +48,35 @@ exploration_mode = {
                     'type': 'string',
                     'description': "The continuation from the player's choice if any. "
                                    "If no previous choice was made, just return an empty string. "
-                                   "This field must have a max length of 100 characters"
+                                   "This field must have a max length of 300 characters"
                 },
                 'exploration_context': {
                     'type': 'string',
                     'description': 'The context for the exploration. '
                                    'The exploration context cannot ever go into a battle of any kind. '
-                                   'This field must have a max length of 500 characters',
-                    'maxLength': 500,
+                                   'This field must have a max length of 800 characters',
+                    'maxLength': 800,
                 },
                 'option1': {
                     'type': 'string',
                     'description': 'The first option for the player. '
-                                   'This field must have a max length of 50 characters',
-                    'maxLength': 50,
+                                   'This field must have a max length of 100 characters',
+                    'maxLength': 100,
                 },
                 'option2': {
                     'type': 'string',
                     'description': 'The second option for the player. '
-                                   'This field must have a max length of 50 characters',
-                    'maxLength': 50,
+                                   'This field must have a max length of 100 characters',
+                    'maxLength': 100,
                 }
             },
-            'required': ['choice_consequence', 'exploration_context', 'option1', 'option2']
+            'required': ['choice_consequence', 'exploration_context', 'option1', 'option2', 'option3', 'option4']
         }
     }
 }
 
 
-def call_openai(messages: list, function_call: dict, temperature=1, model='gpt-3.5-turbo', timeout=60) -> dict:
+def call_openai(messages: list, function_call: dict, temperature=0.8, top_p=0.8, model='gpt-3.5-turbo', timeout=60) -> dict:
 
     max_retries = 3
     errors = []
@@ -86,6 +88,7 @@ def call_openai(messages: list, function_call: dict, temperature=1, model='gpt-3
                 tools=[function_call],
                 tool_choice={'type': 'function', 'function': {'name': function_call['function']['name']}},
                 temperature=temperature,
+                top_p=top_p,
                 timeout=timeout
             )
         except (openai.APIError,
@@ -103,12 +106,15 @@ def call_openai(messages: list, function_call: dict, temperature=1, model='gpt-3
 
 
 if __name__ == '__main__':
-    game_style = 'A standard medieval game with wizard, elves, dwarfs and all.'
+    game_style = 'A standard fantasy medieval game with wizards, elves, dwarfs and all.'
+    # change game style
+
     result = call_openai(
         messages=[{
             'role': 'system',
             'content': f'You are the master of an RPG game based on {game_style}.\n'
                        f'Start the game telling a short story for the beginning of the adventure.',
+                       # add a way to generate context to be used in the exploration function 
         }],
         function_call=start_rpg_adventure,
     )
@@ -125,9 +131,10 @@ if __name__ == '__main__':
             'role': 'system',
             'content': (f'You are the master of an RPG game based on {game_style}.\n'
                         f'You will continue the game based on the summary bellow between <> in the exploration mode.\n'
-                        f'<{summary}>\n'
+                        f'<{summary}>\n' # contexto de longo prazo
                         f'1) Start an exploration from the beginning based on the summary above.\n'
-                        f'2) Give the player two options to continue the exploration.\n'
+                        f'2) Give the player four options to continue the exploration.\n'
+                        # change it to four options
                         f'3) The exploration mode cannot ever go into any battles.')
         }],
         function_call=exploration_mode,
@@ -137,11 +144,15 @@ if __name__ == '__main__':
     context = result['exploration_context']
     option1 = result['option1']
     option2 = result['option2']
+    option3 = result['option3']
+    option4 = result['option4']
 
     print(f'{choice = }')
     print(f'{context = }')
     print(f'{option1 = }')
     print(f'{option2 = }')
+    print(f'{option3 = }')
+    print(f'{option4 = }')
 
     print()
 
@@ -153,6 +164,10 @@ if __name__ == '__main__':
                     selected_option = option1
                 case 2:
                     selected_option = option2
+                case 3:
+                    selected_option = option3
+                case 4:
+                    selected_option = option4
                 case _:
                     print(f'Unknown option: {option}')
                     sys.exit(1)
@@ -200,11 +215,15 @@ if __name__ == '__main__':
         context = result['exploration_context']
         option1 = result['option1']
         option2 = result['option2']
+        option3 = result['option3']
+        option4 = result['option4']
 
         print(f'{choice = }')
         print(f'{context = }')
         print(f'{option1 = }')
         print(f'{option2 = }')
+        print(f'{option3 = }')
+        print(f'{option4 = }')
 
         option = int(input('Select the option: '))
         match option:
@@ -212,6 +231,11 @@ if __name__ == '__main__':
                 selected_option = option1
             case 2:
                 selected_option = option2
+            case 3:
+                selected_option = option3
+            case 4:
+                selected_option = option4
+
             case _:
                 print(f'Unknown option: {option}')
                 break
