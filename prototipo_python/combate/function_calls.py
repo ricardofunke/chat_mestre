@@ -2,13 +2,13 @@ battle_plot_func = {
     'type': 'function',
     'function': {
         'name': 'battle_plot',
-        'description': "Generate a plot for an battle turn for the RPG game based on the user's current situation.",
+        'description': "Generate a plot for a start of a battle turn for the RPG game based on the user's current situation.",
         'parameters': {
             'type': 'object',
             'properties': {
                 'battle_plot': {
                     'type': 'string',
-                    'description': "Full description of the battle turn."
+                    'description': "Description of the start of the battle."
                 },
             }
         },
@@ -26,12 +26,12 @@ battle_result_func = {
             'properties': {
                 'battle_result': {
                     'type': 'string',
-                    'description': "Choose the result of the battle based on 35% chance to win, 15% to lose and 50% chance to remain in the battle.",
+                    'description': "The result of the battle whether the user won, lost or remain in the battle.",
                     'enum': ['won', 'lost', 'remain'],
                 },
                 'battle_result_description': {
                     'type': 'string',
-                    'description': "Full description of the battle result."
+                    'description': "Create the description of the battle result."
                 },
             }
         },

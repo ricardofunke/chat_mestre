@@ -4,6 +4,7 @@ from dataclasses import asdict
 from random import randrange
 from time import sleep
 
+from combate.battle_calculation import fight_outcome
 from combate.create_battle import create_battle_scene, run_battle_iteration
 from common.user_input import exploration_options, battle_options
 from controle.set_the_game import get_game_settings
@@ -50,6 +51,8 @@ if __name__ == '__main__':
     sleep(3)
 
     expl_opt = exploration_options()
+    if not expl_opt:
+        sys.exit(0)
 
     next_iter = run_next_iteration(exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
 
@@ -75,6 +78,8 @@ if __name__ == '__main__':
         sleep(3)
 
         expl_opt = exploration_options()
+        if not expl_opt:
+            sys.exit(0)
 
         next_iter = run_next_iteration(exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
 
@@ -98,6 +103,8 @@ if __name__ == '__main__':
     sleep(3)
 
     expl_opt = exploration_options()
+    if not expl_opt:
+        sys.exit(0)
 
     next_iter = run_next_iteration(exploration['exploration_plot'], expl_options[f'option_{expl_opt}'])
 
@@ -119,8 +126,15 @@ if __name__ == '__main__':
     sleep(3)
 
     battle_opt = battle_options()
+    if not battle_opt:
+        sys.exit(0)
 
-    battle_res = run_battle_iteration(settings, battle_scene['battle_plot'], battle_opt)
+    if battle_opt == 'fight':
+        fight_result = fight_outcome()
+    else:
+        fight_result = 'lost'
+
+    battle_res = run_battle_iteration(settings, battle_scene['battle_plot'], battle_opt, fight_result)
 
     print()
     print(f"Selected \"{battle_opt}\"")
@@ -135,8 +149,15 @@ if __name__ == '__main__':
 
     while battle_res['battle_result'] == 'remain':
         battle_opt = battle_options()
+        if not battle_opt:
+            sys.exit(0)
 
-        battle_res = run_battle_iteration(settings, battle_res['battle_result_description'], battle_opt)
+        if battle_opt == 'fight':
+            fight_result = fight_outcome()
+        else:
+            fight_result = 'lost'
+
+        battle_res = run_battle_iteration(settings, battle_res['battle_result_description'], battle_opt, fight_result)
 
         print(f"Selected \"{battle_opt}\"")
         print()
@@ -167,6 +188,9 @@ if __name__ == '__main__':
     sleep(3)
 
     expl_opt = exploration_options()
+    if not expl_opt:
+        sys.exit(0)
+
     ending = end_exploration(exploration['exploration_plot'], final_opts[f'option_{expl_opt}'])
 
     print(f"Selected \"option_{expl_opt}\": \"{final_opts[f'option_{expl_opt}']}\"")
