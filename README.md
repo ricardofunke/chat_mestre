@@ -10,6 +10,5 @@ $ virtualenv venv
 $ source venv/bin/activate
 $ pip install environs openai
 $ export PYTHONPATH=`pwd`
-$ cd common
-$ python openai_calls.py
+$ python main.py
 ```
