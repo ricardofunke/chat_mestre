@@ -3,7 +3,7 @@ import random
 
 def fight_outcome():
     # Define the probabilities
-    win_probability = 0.25
+    win_probability = 0.30
     lose_probability = 0.15
 
     # Generate a random number between 0 and 1
