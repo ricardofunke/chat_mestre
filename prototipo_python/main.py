@@ -13,9 +13,12 @@ from exploracao.create_exploration import create_exploration_scenery, run_next_i
     finish_exploration, generate_final_options, end_exploration
 
 if __name__ == '__main__':
-    the_style = "A classic medieval game with wizards, elves, dwarfs and so on"
-    the_player = "A smart and agile archer with a very good eye"
+    # the_style = "A classic medieval game with wizards, elves, dwarfs and so on"
+    the_style = input("Describe the style of the game you want to play: ")
+    # the_player = "A smart and agile archer with a very good eye"
     # the_player = "A strong and honorable knight"
+    the_player = input("Describe your character for the game: ")
+
     settings = get_game_settings(the_style, the_player)
     print(json.dumps(asdict(settings), indent=4))
     print()
