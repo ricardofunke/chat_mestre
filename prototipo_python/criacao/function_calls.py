@@ -8,7 +8,7 @@ start_rpg_adventure = {
             'properties': {
                 'full_story': {
                     'type': 'string',
-                    'description': 'The new story text for the game',
+                    'description': 'The new story text for the game with at most 500 characters.',
                     'maxLength': 500,
                 }
             },
